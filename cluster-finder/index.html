@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TeachAstro · Open-cluster explorer</title>
+  <!-- build: 2026-04-21-v13 -->
+  <meta http-equiv="Cache-Control" content="no-store">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('ta-theme')||'dark'}catch{}</script>
+  <link rel="stylesheet" href="./styles.css">
+
+  <!-- Import map — libraries are loaded from esm.sh at runtime in the browser.
+       No build step.  If Jen wants to work offline, these can be vendored later.
+       react-dom/client uses ?external=react so esm.sh treats React as a peer
+       dependency resolved via this importmap, avoiding two React instances. -->
+  <script type="importmap">
+  {
+    "imports": {
+      "react":             "https://esm.sh/react@18.2.0",
+      "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+
+      "react-dom/client":  "https://esm.sh/react-dom@18.2.0/client?external=react",
+
+      "htm":               "https://esm.sh/htm@3.1.1",
+      "plotly.js-dist-min":"https://esm.sh/plotly.js-dist-min@2.35.3",
+      "lz-string":         "https://esm.sh/lz-string@1.5.0"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="root">
+    <div class="boot">Loading TeachAstro… <span style="font-size:0.7em;opacity:0.5">(build 2026-04-21-v13)</span></div>
+  </div>
+
+  <script type="module" src="./main.js?v=13"></script>
+
+  <!-- Runtime error guard.  Catches both synchronous JS errors and unhandled
+       promise rejections (e.g. a CDN module that fails to fetch), then shows
+       the details in-page so we don't have to open DevTools to see what broke. -->
+  <script type="module">
+    function showError(title, detail) {
+      const root = document.getElementById('root');
+      if (root.querySelector('.booted')) return; // App rendered OK — ignore.
+      root.innerHTML = `
+        <div class="boot-error">
+          <h1>TeachAstro failed to start</h1>
+          <p>${title}</p>
+          <pre>${String(detail).replace(/</g, '&lt;')}</pre>
+        </div>`;
+    }
+
+    // Synchronous JS errors (syntax errors, thrown exceptions in module scope).
+    window.addEventListener('error', (e) => {
+      const detail = (e.error && (e.error.stack || e.error.message))
+                  || e.message
+                  || '(no details — check browser console)';
+      const isNetwork = !e.error && !e.message;
+      showError(
+        isNetwork
+          ? 'A library could not be loaded from the CDN. Check your network connection.'
+          : 'A JavaScript error occurred before the app could render:',
+        isNetwork ? 'Network / fetch error' : detail,
+      );
+    });
+
+    // Unhandled promise rejections — this is what fires when an ES module
+    // import() fails (e.g. CDN URL returns 404 or connection refused).
+    window.addEventListener('unhandledrejection', (e) => {
+      const reason = e.reason;
+      const detail = (reason && (reason.stack || reason.message || String(reason)))
+                  || '(no details — check browser console)';
+      showError('A module failed to load (unhandled promise rejection):', detail);
+    });
+
+    // Safety-net timeout: if the app hasn't mounted after 20 s, something is
+    // silently stalled (e.g. a CDN fetch that never resolves or rejects).
+    setTimeout(() => {
+      const root = document.getElementById('root');
+      if (root.querySelector('.booted')) return;
+      if (root.querySelector('.boot-error')) return;
+      showError(
+        'The app is taking unusually long to start (> 20 s). Possible causes:',
+        '• Slow or interrupted CDN connection (esm.sh)\n'
+        + '• A module import is hanging without resolving or rejecting\n\n'
+        + 'Try: open browser DevTools → Network tab, then hard-refresh (Cmd+Shift+R)\n'
+        + 'and look for any requests stuck in "Pending" or showing an error status.',
+      );
+    }, 20000);
+  </script>
+</body>
+</html>

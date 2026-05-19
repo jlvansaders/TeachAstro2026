@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TeachAstro: Star Clusters and Stellar Evolution</title>
+  <meta http-equiv="Cache-Control" content="no-store">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('ta-theme')||'dark'}catch{}</script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-page:      #0b0f1a;
+      --bg-surface:   #0f1422;
+      --bg-hover:     #131929;
+      --border:       #1d2637;
+      --text:         #e2e8f0;
+      --text-body:    #cbd5e1;
+      --text-dim:     #94a3b8;
+      --text-muted:   #64748b;
+      --accent:       #7dd3fc;
+      --accent-soft:  #bae6fd;
+      --badge-bg:     #1d2637;
+      --badge-color:  #64748b;
+      --badge-ok-bg:  #14532d;
+      --badge-ok-fg:  #86efac;
+      --hr-color:     #1d2637;
+      --btn-bg:       #1d2637;
+      --btn-border:   #2a3246;
+      --btn-color:    #e2e8f0;
+      --btn-hover:    #233048;
+    }
+
+    [data-theme="light"] {
+      --bg-page:      #f1f5f9;
+      --bg-surface:   #ffffff;
+      --bg-hover:     #f8fafc;
+      --border:       #e2e8f0;
+      --text:         #1e293b;
+      --text-body:    #475569;
+      --text-dim:     #64748b;
+      --text-muted:   #94a3b8;
+      --accent:       #0284c7;
+      --accent-soft:  #0369a1;
+      --badge-bg:     #e2e8f0;
+      --badge-color:  #64748b;
+      --badge-ok-bg:  #dcfce7;
+      --badge-ok-fg:  #16a34a;
+      --hr-color:     #e2e8f0;
+      --btn-bg:       #f1f5f9;
+      --btn-border:   #cbd5e1;
+      --btn-color:    #1e293b;
+      --btn-hover:    #e2e8f0;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-body);
+      line-height: 1.65;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .site-header .logo { display: block; height: 44px; width: auto; }
+    .site-header .tagline { color: var(--text-dim); font-size: 0.9rem; flex: 1; }
+    .theme-btn {
+      background: var(--btn-bg);
+      color: var(--btn-color);
+      border: 1px solid var(--btn-border);
+      padding: 0.35rem 0.85rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .theme-btn:hover { background: var(--btn-hover); }
+
+    /* ── Page content ── */
+    .page { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+    h2 { font-size: 1.25rem; color: var(--accent); margin: 2.5rem 0 0.75rem; }
+    h3 { font-size: 1rem; color: var(--accent-soft); margin: 1.5rem 0 0.4rem; }
+    p  { color: var(--text-body); margin-bottom: 0.8rem; }
+
+    /* ── App cards ── */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0 2.5rem;
+    }
+    .app-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, background 0.15s;
+      display: block;
+    }
+    .app-card:hover { border-color: var(--accent); background: var(--bg-hover); }
+    .app-card .app-num  { font-size: 0.7rem; color: var(--text-muted);
+                          text-transform: uppercase; letter-spacing: 0.08em;
+                          margin-bottom: 0.35rem; }
+    .app-card .app-name { font-size: 1.05rem; font-weight: 600; color: var(--text);
+                          margin-bottom: 0.5rem; }
+    .app-card .app-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
+    /* ── Merged card internals ── */
+    .merged-inner { display: flex; flex-direction: column; gap: 0; }
+    .merged-section { flex: 1; }
+    .merged-arrow {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--text-muted); font-size: 0.78rem;
+      margin: 0.9rem 0;
+    }
+    .merged-arrow::before, .merged-arrow::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .merged-arrow-icon { font-size: 1rem; color: var(--accent); flex-shrink: 0; }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--hr-color); margin: 2.5rem 0; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="./" style="display:block;line-height:0">
+    <img class="logo" src="./shared/logo.png" alt="TeachAstro">
+  </a>
+  <span class="tagline">Star Clusters and Stellar Evolution · Interactive stellar astronomy for the classroom</span>
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☀ Light</button>
+</header>
+
+<div class="page">
+
+  <h2>About this project</h2>
+  <p>
+    TeachAstro is a set of browser-based tools for exploring real stellar data from the
+    <a href="https://www.cosmos.esa.int/web/gaia" style="color:var(--accent)">Gaia</a> mission.
+    No installation required — everything runs in your browser.
+  </p>
+  <p>
+    The tools are designed to guide students through the process astronomers use to study
+    star clusters: isolating cluster members from foreground and background field stars,
+    reading colour–magnitude diagrams, and fitting theoretical stellar models to real data.
+  </p>
+
+  <h2>The tools</h2>
+  <div class="app-grid">
+
+    <a class="app-card" href="./track-explorer/">
+      <div class="app-num">App 1</div>
+      <div class="app-name">Stellar track explorer</div>
+      <div class="app-desc">
+        Browse theoretical stellar evolutionary tracks and isochrones.
+        Adjust age, metallicity, and other parameters to understand how
+        stars move through colour–magnitude space over time.
+      </div>
+    </a>
+
+    <a class="app-card" href="./cluster-finder/">
+      <div class="merged-inner">
+        <div class="merged-section">
+          <div class="app-num">App 2</div>
+          <div class="app-name">Cluster finder</div>
+          <div class="app-desc">
+            Load a Gaia catalogue for a star cluster region. Use proper-motion and
+            parallax diagrams to isolate cluster members from field stars.
+          </div>
+        </div>
+        <div class="merged-arrow">
+          <span class="merged-arrow-icon">↓</span>
+          <span>leads to</span>
+        </div>
+        <div class="merged-section">
+          <div class="app-num">App 3</div>
+          <div class="app-name">Track overplotter</div>
+          <div class="app-desc">
+            Overlay isochrones on the CMD of your selected cluster stars.
+            Fit age, distance modulus, metallicity, and reddening to match
+            the observed sequence.
+          </div>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <hr>
+
+  <h2>Background science</h2>
+
+  <h3>Open star clusters</h3>
+  <p>
+    Open clusters are groups of hundreds to thousands of stars that formed together from
+    the same molecular cloud, and are loosely gravitationally bound. Because they share a
+    common origin, all stars in a cluster have the same age, initial chemical composition,
+    and distance — making them ideal laboratories for testing models of stellar evolution.
+    Famous examples include the Pleiades (∼125 Myr), the Hyades (∼700 Myr), and
+    the older M67 (∼4 Gyr).
+  </p>
+
+  <h3>Gaia proper motions and parallaxes</h3>
+  <p>
+    The ESA Gaia spacecraft measures the precise positions, motions, and distances of
+    over a billion stars. Stars belonging to the same cluster move together through space,
+    so they form a tight clump in proper-motion space (pmRA vs pmDec) that stands out
+    clearly from the distributed field-star population. Their parallaxes (and therefore
+    distances) are also consistent with one another, giving a second independent way to
+    identify members.
+  </p>
+
+  <h3>The colour–magnitude diagram</h3>
+  <p>
+    When you plot stellar brightness against colour (a proxy for surface temperature),
+    stars follow a well-defined main sequence from hot blue stars at the top-left to cool
+    red stars at the bottom-right. As a cluster ages, more massive stars evolve off the
+    main sequence toward the giant branch. The point where stars begin to leave the main
+    sequence — the "turn-off point" — is a sensitive clock: the older the cluster, the
+    lower (cooler, dimmer) the turn-off.
+  </p>
+
+  <h3>Stellar evolutionary tracks and isochrones</h3>
+  <p>
+    Theoretical models predict how a star of a given mass and composition moves through
+    the HR diagram over its lifetime — these are called <em>evolutionary tracks</em>.
+    An <em>isochrone</em> (from Greek: equal time) connects the positions of stars of
+    different masses but the same age, tracing what a cluster's CMD should look like
+    at that moment. Fitting an isochrone to an observed cluster CMD gives estimates of
+    the cluster's age, distance, and metal abundance.
+  </p>
+
+  <hr>
+
+  <h2>Workflow</h2>
+  <p>
+    The intended student workflow moves left to right through the three apps:
+  </p>
+  <ol style="color:var(--text-body); padding-left:1.5rem; margin-bottom:0.8rem">
+    <li style="margin-bottom:0.5rem">
+      Use the <strong>stellar track explorer</strong> to get familiar with isochrones
+      and understand what parameters shift them on the CMD.
+    </li>
+    <li style="margin-bottom:0.5rem">
+      Use the <strong>cluster finder</strong> to select likely cluster members using
+      proper-motion lasso and parallax range filtering.
+    </li>
+    <li>
+      Use the <strong>track overplotter</strong> — opened directly from the cluster finder
+      via "Send to overplotter" — to fit an isochrone to your cluster stars and determine
+      its age, distance, and metallicity.
+    </li>
+  </ol>
+  <p>
+    All selections are encoded in the page URL, so sessions can be bookmarked, shared,
+    or submitted as part of a lab report.
+  </p>
+
+</div>
+
+<script>
+  function toggleTheme() {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('ta-theme', next); } catch {}
+    document.getElementById('theme-btn').textContent = next === 'dark' ? '☀ Light' : '🌙 Dark';
+  }
+  // Sync button label to current theme on load.
+  (function () {
+    const t = document.documentElement.dataset.theme;
+    document.getElementById('theme-btn').textContent = t === 'light' ? '🌙 Dark' : '☀ Light';
+  })();
+</script>
+</body>
+</html>

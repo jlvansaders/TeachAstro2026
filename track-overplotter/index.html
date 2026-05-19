@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TeachAstro · Track overplotter</title>
+  <meta http-equiv="Cache-Control" content="no-store">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('ta-theme')||'dark'}catch{}</script>
+  <link rel="stylesheet" href="../cluster-finder/styles.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "react":             "https://esm.sh/react@18.2.0",
+      "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+      "react-dom/client":  "https://esm.sh/react-dom@18.2.0/client?external=react",
+      "htm":               "https://esm.sh/htm@3.1.1",
+      "plotly.js-dist-min":"https://esm.sh/plotly.js-dist-min@2.35.3",
+      "lz-string":         "https://esm.sh/lz-string@1.5.0"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="root"><div class="boot">Loading…</div></div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

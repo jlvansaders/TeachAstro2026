@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 234 52">
+  <title>TeachAstro</title>
+
+  <!-- Crescent moon via evenodd: outer r=18 cx=20 cy=26, inner r=12 cx=25.5 cy=26 -->
+  <!-- inner right edge (37.5) stays inside outer right edge (38) — no bleed -->
+  <path fill-rule="evenodd" fill="#7dd3fc" d="
+    M 38,26 A 18,18 0 1,0 2,26 A 18,18 0 1,0 38,26 Z
+    M 37.5,26 A 12,12 0 1,0 13.5,26 A 12,12 0 1,0 37.5,26 Z
+  "/>
+
+  <!-- 4-pointed star sparkle near crescent tip -->
+  <path fill="#7dd3fc" d="
+    M 37,3 L 38.27,6.73 L 42,8 L 38.27,9.27
+    L 37,13 L 35.73,9.27 L 32,8 L 35.73,6.73 Z
+  "/>
+
+  <!-- TeachAstro wordmark -->
+  <text x="50" y="31"
+    font-family="system-ui,-apple-system,sans-serif"
+    font-size="23" font-weight="600"
+    fill="#7dd3fc" letter-spacing="-0.02em">TeachAstro</text>
+
+  <!-- Subtitle -->
+  <text x="51" y="44"
+    font-family="system-ui,-apple-system,sans-serif"
+    font-size="10" font-weight="400"
+    fill="#5eead4" letter-spacing="0.08em">INSTITUTE FOR ASTRONOMY</text>
+</svg>

@@ -56,6 +56,7 @@ function ClusterPickerScreen() {
         </div>
       </div>
       <div className="cp-body">
+        <img src="../shared/logo.png" alt="TeachAstro" className="cp-hero-logo" />
         <h1 className="cp-heading">Choose a star cluster</h1>
         <p className="cp-sub">Select a dataset to begin exploring Gaia stellar data.</p>
         ${manifest && (() => {

@@ -165,7 +165,7 @@ function msRange(lo, hi, axisType, reversed = false, pad = 0.06) {
 // Build 2 traces per track slot (MS at full opacity, post-MS dimmed; pre-MS
 // excluded) plus the highlight trace.  Always emits exactly HL+1 traces so
 // curveNumber arithmetic in the hover handlers stays stable.
-function buildTraces(tracks, masses, xCol, yCol, theme) {
+function buildTraces(tracks, masses, xCol, yCol, theme, showAge = false) {
   const colors = tColors(theme);
   const hl     = hlColor(theme);
   const xCfg   = COL_DISPLAY[xCol];
@@ -192,18 +192,23 @@ function buildTraces(tracks, masses, xCol, yCol, theme) {
     const msStart = zamsIdx === -1 ? 0 : zamsIdx;
     const msEnd   = tamsIdx === -1 ? track.eep.length : tamsIdx;
 
-    const xAll = xCfg.values(track);
-    const yAll = yCfg.values(track);
+    const xAll   = xCfg.values(track);
+    const yAll   = yCfg.values(track);
+    const ageAll = track.Age_gyr;
 
+    const ageLine = showAge ? `Age: %{customdata:.4g} Gyr<br>` : '';
     const htmpl = (label) =>
       `<b>${mass} M☉</b> (${label})<br>` +
       `${xCfg.selectLabel}: %{x:${xCfg.hoverFmt}}<br>` +
-      `${yCfg.selectLabel}: %{y:${yCfg.hoverFmt}}<extra></extra>`;
+      `${yCfg.selectLabel}: %{y:${yCfg.hoverFmt}}<br>` +
+      ageLine +
+      `<extra></extra>`;
 
     // MS trace (ZAMS → TAMS, inclusive)
     traces.push({
       x: xAll.slice(msStart, msEnd),
       y: yAll.slice(msStart, msEnd),
+      ...(showAge && { customdata: ageAll.slice(msStart, msEnd) }),
       mode: 'lines', type: 'scatter',
       name: `${mass} M☉`,
       line: { color: colors[i], width: 2.5 },
@@ -214,6 +219,7 @@ function buildTraces(tracks, masses, xCol, yCol, theme) {
     traces.push({
       x: tamsIdx === -1 ? [] : xAll.slice(tamsIdx),
       y: tamsIdx === -1 ? [] : yAll.slice(tamsIdx),
+      ...(showAge && { customdata: tamsIdx === -1 ? [] : ageAll.slice(tamsIdx) }),
       mode: 'lines', type: 'scatter',
       name: `${mass} M☉`, showlegend: false,
       opacity: POST_MS_ALPHA,
@@ -269,7 +275,8 @@ function buildLociTraces(lociData, activeLabels, theme) {
   return activeLabels.map(label => {
     const locus = lociData.find(l => l.label === label);
     if (!locus) return null;
-    const style = styles[label] ?? { color: '#888', dash: 'solid', width: 1.5 };
+    const isoColor = theme === 'dark' ? 'rgba(255,255,255,0.80)' : 'rgba(15,23,42,0.75)';
+    const style = styles[label] ?? { color: isoColor, dash: 'dash', width: 1.5 };
 
     // Filter out cool luminous points (same fix as track-overplotter):
     // Teff < 3500 with LogL > 0 produces ordering artefacts on the giant branch.
@@ -285,7 +292,8 @@ function buildLociTraces(lociData, activeLabels, theme) {
 
     const lineTrace = {
       x, y,
-      mode: 'lines', type: 'scatter',
+      mode: 'lines+markers', type: 'scatter',
+      marker: { size: 10, color: 'rgba(0,0,0,0)', line: { width: 0 } },
       name: label,
       // Isochrones are labelled inline; keep ZAMS/TAMS in the legend.
       showlegend: !isIsochrone,
@@ -298,26 +306,7 @@ function buildLociTraces(lociData, activeLabels, theme) {
       customdata: mass,
     };
 
-    if (!isIsochrone || x.length === 0) return [lineTrace];
-
-    // Anchor label at the point nearest to 1 M☉ — always within the MS view.
-    let tipIdx = 0, minDist = Infinity;
-    for (let i = 0; i < mass.length; i++) {
-      const d = Math.abs(mass[i] - 1.0);
-      if (d < minDist) { minDist = d; tipIdx = i; }
-    }
-
-    const labelTrace = {
-      x: [x[tipIdx]], y: [y[tipIdx]],
-      mode: 'text', type: 'scatter',
-      text: [label],
-      textposition: 'top center',
-      textfont: { color: style.color, size: 13, family: 'inherit' },
-      showlegend: false,
-      hoverinfo: 'skip',
-    };
-
-    return [lineTrace, labelTrace];
+    return [lineTrace];
   }).flat().filter(Boolean);
 }
 
@@ -368,7 +357,7 @@ function DualPlot({ tracks, masses, xAxis, yAxis, onXChange, onYChange, lociData
 
     // Left panel: track segments (0-5) + highlight (6) + loci (7+).
     const lTraces = [
-      ...buildTraces(tracks, masses, 'log_Teff', 'LogL_lsun', theme),
+      ...buildTraces(tracks, masses, 'log_Teff', 'LogL_lsun', theme, true),
       ...buildLociTraces(lociData, activeLoci, theme),
     ];
     const rTraces = buildTraces(tracks, masses, xAxis, yAxis, theme);
@@ -403,8 +392,16 @@ function DualPlot({ tracks, masses, xAxis, yAxis, onXChange, onYChange, lociData
     }
 
     function onHoverLeft(e) {
-      const pt       = e.points[0];
-      if (pt.curveNumber >= HL) return;
+      const pt = e.points[0];
+      if (pt.curveNumber === HL) return;
+
+      if (pt.curveNumber > HL) {
+        // Locus hovered: thicken it.
+        Plotly.restyle(lEl, { 'line.width': 3 }, [pt.curveNumber]);
+        return;
+      }
+
+      // Track hovered: cross-highlight right panel.
       const slot     = pt.curveNumber >> 1;
       const isPostMS = (pt.curveNumber & 1) === 1;
       const track    = findTrack(tracks, masses[slot]);
@@ -419,6 +416,11 @@ function DualPlot({ tracks, masses, xAxis, yAxis, onXChange, onYChange, lociData
 
     function onUnhoverLeft() {
       Plotly.restyle(rEl, { x: [[]], y: [[]] }, [HL]);
+      // Reset all loci to normal line width.
+      if (activeLoci.length > 0) {
+        const lociIndices = Array.from({ length: activeLoci.length }, (_, i) => HL + 1 + i);
+        Plotly.restyle(lEl, { 'line.width': 1.5 }, lociIndices);
+      }
     }
 
     function onHoverRight(e) {

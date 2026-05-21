@@ -251,6 +251,12 @@ function CMD({ data, session, isochrones, correctDist, correctDust, onToggleDist
         <span style=${{ color: 'var(--text-dim)', fontSize: '0.95rem' }}>Correct isochrones for:</span>
         <${ToggleButton} label="Cluster distance" active=${correctDist} onClick=${onToggleDist} />
         <${ToggleButton} label="Dust reddening and extinction" active=${correctDust} onClick=${onToggleDust} />
+        <span style=${{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>
+          extinction law: <a href="https://doi.org/10.1051/0004-6361/202039587" target="_blank"
+            style=${{ color: 'var(--accent)' }}>Riello et al. 2021</a>;
+          curve: <a href="https://doi.org/10.1086/316293" target="_blank"
+            style=${{ color: 'var(--accent)' }}>Fitzpatrick 1999</a>
+        </span>
       </div>
       <div style=${{ marginBottom: '0.75rem', display: 'flex', flexWrap: 'wrap',
                      alignItems: 'center', gap: '1rem' }}>

@@ -83,8 +83,22 @@
     }
     .theme-btn:hover { background: var(--btn-hover); }
 
+    /* ── Logo hero ── */
+    .logo-hero {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 2rem 1.5rem;
+      background: var(--bg-page);
+    }
+    .logo-hero img {
+      height: 180px;
+      width: auto;
+      display: block;
+    }
+
     /* ── Page content ── */
-    .page { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+    .page { max-width: 860px; margin: 0 auto; padding: 1.5rem 2rem 6rem; }
 
     h2 { font-size: 1.25rem; color: var(--accent); margin: 2.5rem 0 0.75rem; }
     h3 { font-size: 1rem; color: var(--accent-soft); margin: 1.5rem 0 0.4rem; }
@@ -141,18 +155,24 @@
   <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☀ Light</button>
 </header>
 
+<div class="logo-hero">
+  <a href="https://student.ifa.hawaii.edu/teachastro/" target="_blank" rel="noopener noreferrer" style="display:block;line-height:0">
+    <img src="./shared/logo.png" alt="TeachAstro" style="cursor:pointer">
+  </a>
+</div>
+
 <div class="page">
 
   <h2>About this project</h2>
   <p>
-    TeachAstro is a set of browser-based tools for exploring real stellar data from the
+    The browser-based tools presented here are for exploring real stellar data from the
     <a href="https://www.cosmos.esa.int/web/gaia" style="color:var(--accent)">Gaia</a> mission.
     No installation required — everything runs in your browser.
   </p>
   <p>
     The tools are designed to guide students through the process astronomers use to study
     star clusters: isolating cluster members from foreground and background field stars,
-    reading colour–magnitude diagrams, and fitting theoretical stellar models to real data.
+    reading color–magnitude diagrams, and fitting theoretical stellar models to real data.
   </p>
 
   <h2>The tools</h2>
@@ -164,7 +184,7 @@
       <div class="app-desc">
         Browse theoretical stellar evolutionary tracks and isochrones.
         Adjust age, metallicity, and other parameters to understand how
-        stars move through colour–magnitude space over time.
+        stars move through color–magnitude space over time.
       </div>
     </a>
 
@@ -220,9 +240,9 @@
     identify members.
   </p>
 
-  <h3>The colour–magnitude diagram</h3>
+  <h3>The color–magnitude diagram</h3>
   <p>
-    When you plot stellar brightness against colour (a proxy for surface temperature),
+    When you plot stellar brightness against color (a proxy for surface temperature),
     stars follow a well-defined main sequence from hot blue stars at the top-left to cool
     red stars at the bottom-right. As a cluster ages, more massive stars evolve off the
     main sequence toward the giant branch. The point where stars begin to leave the main

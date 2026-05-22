@@ -60,6 +60,7 @@ async function loadIsochrones(datasetId) {
     const gbp  = parseFloat(p[colBP]);
     const grp  = parseFloat(p[colRP]);
     if (!isFinite(g) || !isFinite(gbp) || !isFinite(grp)) continue;
+    if (g < -8 || gbp < -8 || grp < -8) continue;  // YBC BC failure (e.g. sci-notation parse error)
     if (teff < 3500 && logL > 0) continue;
 
     const map = Math.abs(av) < 0.001 ? av0 : avCluster;

@@ -61,7 +61,7 @@ function ClusterPickerScreen() {
         <p className="cp-sub">Select a dataset to begin exploring Gaia stellar data.</p>
         ${manifest && (() => {
           const START    = ['Pleiades', 'M37', 'M67', 'NGC752', 'Hyades'];
-          const ADVANCED = ['NGC188', 'NGC2158', 'NGC6633', 'NGC6791', 'NGC6819'];
+          const ADVANCED = ['NGC188', 'NGC6633', 'NGC6791', 'NGC6819'];
           const byId     = Object.fromEntries(manifest.datasets.map(d => [d.id, d]));
           const group = (ids, label) => html`
             <div className="cp-group" key=${label}>

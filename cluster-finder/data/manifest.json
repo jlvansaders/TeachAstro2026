@@ -4,7 +4,6 @@
     { "id": "M37",     "name": "M37",     "file": "M37.csv.gz"     },
     { "id": "M67",     "name": "M67",     "file": "M67.csv.gz"     },
     { "id": "NGC188",  "name": "NGC188",  "file": "NGC188.csv.gz"  },
-    { "id": "NGC2158", "name": "NGC2158", "file": "NGC2158.csv.gz" },
     { "id": "NGC6633", "name": "NGC6633", "file": "NGC6633.csv.gz" },
     { "id": "NGC6791", "name": "NGC6791", "file": "NGC6791.csv.gz" },
     { "id": "NGC6819", "name": "NGC6819", "file": "NGC6819.csv.gz" },

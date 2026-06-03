@@ -310,6 +310,25 @@ function buildLociTraces(lociData, activeLabels, theme) {
   }).flat().filter(Boolean);
 }
 
+// Compute [Teff_min, Teff_max, L_min, L_max] across all active loci (linear units).
+function lociBoundsHRD(lociData, activeLabels) {
+  let tMin = Infinity, tMax = -Infinity, lMin = Infinity, lMax = -Infinity;
+  if (!lociData) return [tMin, tMax, lMin, lMax];
+  for (const label of activeLabels) {
+    const locus = lociData.find(l => l.label === label);
+    if (!locus) continue;
+    for (let i = 0; i < locus.Teff.length; i++) {
+      if (locus.Teff[i] < 3500 && locus.LogL_lsun[i] > 0) continue;
+      if (locus.Teff[i] < tMin) tMin = locus.Teff[i];
+      if (locus.Teff[i] > tMax) tMax = locus.Teff[i];
+      const l = 10 ** locus.LogL_lsun[i];
+      if (l < lMin) lMin = l;
+      if (l > lMax) lMax = l;
+    }
+  }
+  return [tMin, tMax, lMin, lMax];
+}
+
 // xRange / yRange: explicit Plotly range arrays (log10 space for log axes).
 // Pass null to fall back to autorange.  Reversed x is encoded in the range
 // itself (xRange[0] > xRange[1]) so no separate reverseX flag is needed.
@@ -363,8 +382,13 @@ function DualPlot({ tracks, masses, xAxis, yAxis, onXChange, onYChange, lociData
     const rTraces = buildTraces(tracks, masses, xAxis, yAxis, theme);
 
     // Scale both panels to the MS portion of the active tracks.
-    const [lxLo, lxHi] = msBounds(tracks, masses, 'log_Teff');
-    const [lyLo, lyHi] = msBounds(tracks, masses, 'LogL_lsun');
+    // If no tracks are active but loci are shown, scale to the loci instead.
+    let [lxLo, lxHi] = msBounds(tracks, masses, 'log_Teff');
+    let [lyLo, lyHi] = msBounds(tracks, masses, 'LogL_lsun');
+    if ((!isFinite(lxLo) || !isFinite(lxHi)) && activeLoci.length > 0) {
+      const [tMin, tMax, lMin, lMax] = lociBoundsHRD(lociData, activeLoci);
+      lxLo = tMin; lxHi = tMax; lyLo = lMin; lyHi = lMax;
+    }
     const lxRange = msRange(lxLo, lxHi, 'log', /* reversed */ true);
     const lyRange = msRange(lyLo, lyHi, 'log');
 

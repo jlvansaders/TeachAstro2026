@@ -1,0 +1,61 @@
+#
+#   VizieR Astronomical Server vizier.cds.unistra.fr
+#    Date: 2026-05-15T19:31:04 [V7.5.6]
+#   In case of problem, please report to:	cds-question@unistra.fr
+#
+#
+#Coosys	J2000:	eq_FK5 J2000
+#INFO	service_protocol=ASU	  IVOID of the protocol through which the data was retrieved
+#INFO	request_date=2026-05-15T19:31:04	  Query execution date
+#INFO	request=https://vizier.cds.unistra.fr/viz-bin/asu-tsv?-oc.form=dec&-out.max=unlimited&-c.eq=J2000&-c.r=  2&-c.u=arcmin&-c.geom=r&-source=J/A+A/640/A1/table1&-order=I&-out=Cluster&-out=pmRA*&-out=pmDE&-out=plx&-out=AgeNN&-out=AVNN&	  Full request URL (POST)
+#INFO	contact=cds-question@unistra.fr	  Email or URL to contact publisher
+#INFO	server_software=VizieR/7.5.6	  Software version
+#INFO	publisher=CDS	  Data centre that produced the VOTable
+
+#RESOURCE=yCat_36400001
+#Name: J/A+A/640/A1
+#Title: Portrait Galactic disc (Cantat-Gaudin+, 2020)
+#INFO	ivoid=ivo://cds.vizier/j/a+a/640/a1	    IVOID of underlying data collection
+#INFO	data_ivoid=ivo://cds.vizier/j/a+a/640/a1	    IVOID of underlying data collection
+#INFO	creator=Cantat-Gaudin T.	    First author or institution
+#INFO	cites=bibcode:2020A&A...640A...1C	    Article or Data origin sources
+#INFO	journal=A&A	    Journal name
+#INFO	original_date=2020	    Year of the article publication
+#INFO	reference_url=https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/640/A1	    Dataset landing page
+#INFO	citation=doi:10.26093/cds/vizier.36400001	    Dataset identifier that can be used for citation
+#INFO	publication_date=2022-05-05	    Date of first publication in the data centre
+#INFO	rights_uri=https://cds.unistra.fr/vizier-org/licences_vizier.html	    Licence URI
+#Coosys	H_2015.500:	ICRS
+#Table	J_A_A_640_A1_table1:
+#Name: J/A+A/640/A1/table1
+#Title: Mean cluster parameters
+#Column	Cluster	(a17)	Cluster name	[ucd=meta.id.parent]
+#Column	pmRA*	(F7.3)	Mean proper motion along RA of members, pmRA*cosDE	[ucd=pos.pm;pos.eq.ra]
+#Column	pmDE	(F7.3)	Mean proper motion along DE of members	[ucd=pos.pm;pos.eq.dec]
+#Column	plx	(F6.3)	Mean parallax of members	[ucd=pos.parallax.trig]
+#Column	AgeNN	(F5.2)	? Age (logt) of the cluster	[ucd=time.age]
+#Column	AVNN	(F5.2)	? Extinction Av of the cluster	[ucd=phys.absorption]
+#Column	[Fe/H]HQS	(F5.2)	? Metallicity from high-quality spectroscopic data data (HQS)	[ucd=phys.abund.Fe]
+#Column	e_[Fe/H]HQS	(F5.2)	? rms uncertainty on [Fe/H]HQS	[ucd=stat.error;phys.abund.Fe]
+#Column	[Fe/H]LQS	(F5.2)	? Metallicity from low-quality spectroscopic data data (LQS)	[ucd=phys.abund.Fe]
+#Column	Age	(F5.2)	Age	[ucd=time.age]
+# NOTE! The extinction for NGC6791 is from https://doi.org/10.1093/mnras/staf1469
+Cluster|pmRA*|pmDE|plx|AgeNN|AVNN|[Fe/H]HQS|e_[Fe/H]HQS|[Fe/H]LQS|Age
+# |mas/yr|mas/yr|mas|[yr]|mag|[-]|[-]|[-]|Gyr
+#-----------------|-------|-------|------|-----|-----
+Pleiades         | 20.077|-45.503| 7.346| 7.89| 0.18 |-0.01| 0.05|     | 0.10
+Hyades           |103.018|-27.228|21.059| 8.90| 0.00 | 0.13| 0.05| 0.14| 0.72
+NGC2099          |  1.924| -5.648| 0.666| 8.65| 0.75 | 0.02| 0.05|     | 0.36
+NGC2682          |-10.986| -2.964| 1.135| 9.63| 0.07 | 0.03| 0.05| 0.00| 3.45
+NGC752           |  9.810|-11.713| 2.239| 9.07| 0.07 |-0.03| 0.06|-0.09| 1.69
+Ruprecht147      | -0.939|-26.576| 3.250| 9.48| 0.06 | 0.16| 0.08|     | 2.37
+NGC6819          | -2.916| -3.856| 0.356| 9.35| 0.40 | 0.09| 0.01|-0.04| 2.11
+NGC6791          | -0.421| -2.269| 0.192| 9.80| 0.53 | 0.42| 0.05| 0.35| 7.00
+NGC6633          |  1.198| -1.811| 2.525| 8.84| 0.30 |-0.08| 0.12|-0.11| 0.52
+NGC2158          | -0.177| -2.002| 0.192| 9.19| 1.44 |     |     |-0.32| 1.67
+NGC188           | -2.307| -0.960| 0.507| 9.85| 0.21 | 0.11| 0.04|-0.02| 6.27
+
+
+
+
+

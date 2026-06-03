@@ -172,7 +172,8 @@ function CMD({ data, session, isochrones, correctDist, correctDust, onToggleDist
     const distMod = (corrPlx && corrPlx > 0) ? 5 * Math.log10(1000 / corrPlx) - 5 : 0;
 
     // Select isochrone map and magnitude shift.
-    const isoMap   = correctDust ? isochrones.avCluster : isochrones.av0;
+    // Fall back to av0 if avCluster is empty (zero-extinction cluster like Hyades).
+    const isoMap   = (correctDust && isochrones.avCluster.size > 0) ? isochrones.avCluster : isochrones.av0;
     const magShift = correctDist ? distMod : 0;
 
     const traces = [

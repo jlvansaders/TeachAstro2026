@@ -56,6 +56,7 @@ const COL_DISPLAY = {
     title:       'T<sub>eff</sub> (K)',
     hoverFmt:    ',.0f',
     selectLabel: 'Teff  —  log scale',
+    hoverLabel:  'Teff (K)',
   },
   Teff: {
     values:      t => t.Teff,
@@ -63,6 +64,7 @@ const COL_DISPLAY = {
     title:       'T<sub>eff</sub> (K)',
     hoverFmt:    ',.0f',
     selectLabel: 'Teff  —  linear scale',
+    hoverLabel:  'Teff (K)',
   },
   LogL_lsun: {
     values:      t => t.LogL_lsun.map(v => 10 ** v),  // convert to L/L☉
@@ -70,6 +72,7 @@ const COL_DISPLAY = {
     title:       'L/L<sub>☉</sub>',
     hoverFmt:    '.4g',
     selectLabel: 'L/L☉  —  log scale',
+    hoverLabel:  'L/L☉',
   },
   Log_g: {
     values:      t => t.Log_g.map(v => 10 ** v),       // convert to g in cm/s²
@@ -77,6 +80,7 @@ const COL_DISPLAY = {
     title:       'g (cm s<sup>−2</sup>)',
     hoverFmt:    '.4g',
     selectLabel: 'g  —  log scale',
+    hoverLabel:  'g (cm/s²)',
   },
   LogR_rsun: {
     values:      t => t.R_rsun,                        // R_rsun already unlogged
@@ -84,6 +88,7 @@ const COL_DISPLAY = {
     title:       'R/R<sub>☉</sub>',
     hoverFmt:    '.4g',
     selectLabel: 'R/R☉  —  log scale',
+    hoverLabel:  'R/R☉',
   },
   R_rsun: {
     values:      t => t.R_rsun,
@@ -199,8 +204,8 @@ function buildTraces(tracks, masses, xCol, yCol, theme, showAge = false) {
     const ageLine = showAge ? `Age: %{customdata:.4g} Gyr<br>` : '';
     const htmpl = (label) =>
       `<b>${mass} M☉</b> (${label})<br>` +
-      `${xCfg.selectLabel}: %{x:${xCfg.hoverFmt}}<br>` +
-      `${yCfg.selectLabel}: %{y:${yCfg.hoverFmt}}<br>` +
+      `${xCfg.hoverLabel ?? xCfg.selectLabel}: %{x:${xCfg.hoverFmt}}<br>` +
+      `${yCfg.hoverLabel ?? yCfg.selectLabel}: %{y:${yCfg.hoverFmt}}<br>` +
       ageLine +
       `<extra></extra>`;
 
